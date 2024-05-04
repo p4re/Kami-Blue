@@ -42,6 +42,7 @@ end
 local function HookChamPlayer(Player)
     pcall(function()
         CharacterAdded = Player.CharacterAdded:Connect(function()
+            task.wait(0.25)
             repeat task.wait() until Player.Character:FindFirstChildWhichIsA("Humanoid")
             repeat task.wait() until Player.Character:FindFirstChild("HumanoidRootPart")
             task.wait(0.15)
