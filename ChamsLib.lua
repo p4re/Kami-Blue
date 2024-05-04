@@ -13,6 +13,7 @@ end
 local function AddChams(Character)
     repeat task.wait() until Character:FindFirstChildWhichIsA("Humanoid")
     repeat task.wait() until Character:FindFirstChild("HumanoidRootPart")
+    repeat task.wait() until Character:FindFirstChild("Head")
     task.wait(0.02) local Highlight = Visuals.HighlightBody(Character,Color3.fromRGB(255,0,0),false)
     Clock = os.clock()
     RenderStepped = RunService.RenderStepped:Connect(function()
@@ -40,9 +41,6 @@ local function AddChams(Character)
 end
 local function HookChamPlayer(Player)
     pcall(function()
-        if Player.Character then
-            AddChams(Player.Character)
-        end
         CharacterAdded = Player.CharacterAdded:Connect(function()
             repeat task.wait() until Player.Character:FindFirstChildWhichIsA("Humanoid")
             repeat task.wait() until Player.Character:FindFirstChild("HumanoidRootPart")
@@ -52,6 +50,11 @@ local function HookChamPlayer(Player)
         Players.PlayerRemoving:Connect(function(PlayerV)
             if PlayerV == Player then
                 CharacterAdded:Disconnect()
+            end
+        end)
+        spawn(function()
+            if Player.Character then
+                AddChams(Player.Character)
             end
         end)
     end)
