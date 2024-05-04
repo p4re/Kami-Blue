@@ -39,19 +39,21 @@ local function AddChams(Character)
     end)
 end
 local function HookChamPlayer(Player)
-    if Player.Character then
-        AddChams(Player.Character)
-    end
-    CharacterAdded = Player.CharacterAdded:Connect(function()
-        repeat task.wait() until Player.Character:FindFirstChildWhichIsA("Humanoid")
-        repeat task.wait() until Player.Character:FindFirstChild("HumanoidRootPart")
-        task.wait(0.15)
-        AddChams(Player.Character)
-    end)
-    Players.PlayerRemoving:Connect(function(PlayerV)
-        if PlayerV == Player then
-            CharacterAdded:Disconnect()
+    pcall(function()
+        if Player.Character then
+            AddChams(Player.Character)
         end
+        CharacterAdded = Player.CharacterAdded:Connect(function()
+            repeat task.wait() until Player.Character:FindFirstChildWhichIsA("Humanoid")
+            repeat task.wait() until Player.Character:FindFirstChild("HumanoidRootPart")
+            task.wait(0.15)
+            AddChams(Player.Character)
+        end)
+        Players.PlayerRemoving:Connect(function(PlayerV)
+            if PlayerV == Player then
+                CharacterAdded:Disconnect()
+            end
+        end)
     end)
 end
 Players.PlayerAdded:Connect(function(Player)
