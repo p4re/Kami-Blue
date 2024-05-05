@@ -17,7 +17,71 @@ local settings = {
     ["interval"] = 0.025,
     ["release"] = 0.025,
     ["prediction"] = false,
-    ["multiplier"] = 4
+    ["multiplier"] = 4,
+    ["conditions"] = {
+        ["enabled"] = true,
+        ["table"] = {
+            "knife",
+            "gun",
+            "weapon",
+            "hitbox",
+            "item",
+            "shoot",
+            "shot",
+            "revolver",
+            "pistol",
+            "ak",
+            "luger",
+            "sniper",
+            "throw",
+            "hit",
+            "touch",
+            "shank", -- :skull: a game actually uses this btw
+            "stab",
+            "damage",
+            "hurt",
+            "attack",
+            "range",
+            "hitbox",
+            "deagle",
+            "ammo",
+            "ammu",
+            "ar",
+            "assault",
+            "rifle",
+            "fire",
+            "scope",
+            "glock",
+            "dual",
+            "berreta",
+            "tec",
+            "fal",
+            "machine",
+            "desert",
+            "socom",
+            "mk",
+            "mac",
+            "pps",
+            "tommy",
+            "m4",
+            "a1",
+            "m2",
+            "m1",
+            "m3",
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "m9",
+            "awp",
+            "scout",
+            "tdi",
+            "mouse",
+            "tase",
+            "taze",
+            "inter"
+        }
+    }
 }
 local client = {
     ["GetPartsObscuringTarget"] = game:GetService("Workspace").CurrentCamera.GetPartsObscuringTarget,
@@ -83,6 +147,15 @@ function settings.update()
     Lock2.Color = settings.lockcolor
 end
 settings.update()
+local function MeetsConditions(lookupstring,conditions)
+    for _, condition in next, conditions do
+        if lookupstring:find(condition) then
+            print(condition, lookupstring)
+            return true
+        end
+    end
+    return false
+end
 local function GetScreenPosition(Vector)
     local ScreenPosition, OnScreen = client.WorldToScreenPoint(client.Camera, Vector)
     return Vector2.new(ScreenPosition.X, ScreenPosition.Y), OnScreen
@@ -131,12 +204,13 @@ end
 local __namecall
 __namecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
     local method = getnamecallmethod()
-    local callingscript = getcallingscript()
+    local callingscript = tostring(getcallingscript()):lower()
     local arguments = {...}
     local self = arguments[1]
 	local main = arguments[2]
     if self == workspace and not checkcaller() and settings.rays then
-        if tostring(callingscript):lower() ~= "controlmodule" then
+        if callingscript ~= "controlmodule" then
+            if settings.conditions.enabled and MeetsConditions(callingscript, settings.conditions.table) then else return __namecall(...) end
             if method:lower():find("findpartonray") then
                 local hit = GetClosest()
                 if hit then
@@ -158,7 +232,9 @@ __namecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
 end))
 local __index = nil 
 __index = hookmetamethod(game, "__index", newcclosure(function(self, index)
+    local callingscript = tostring(getcallingscript()):lower()
     if self == client.Mouse and not checkcaller() and settings.mouse then
+        if settings.conditions.enabled and MeetsConditions(callingscript, settings.conditions.table) then else return __index(self, index) end
         local hit = GetClosest()
         if hit then
             if index:lower() == "target" then
