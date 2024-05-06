@@ -1,8 +1,8 @@
 -- <3 https://github.com/0zBug
 local settings = {
-    ["radius"] = 175,
+    ["radius"] = 250,
     ["enabled"] = true,
-    ["visiblecheck"] = true,
+    ["visiblecheck"] = false,
     ["rays"] = true,
     ["mouse"] = true,
     ["fovcolor"] = Color3.fromRGB(255,255,255),
@@ -46,7 +46,7 @@ local settings = {
             "deagle",
             "ammo",
             "ammu",
-            "ar",
+            --"ar",
             "assault",
             "rifle",
             "fire",
@@ -150,7 +150,6 @@ settings.update()
 local function MeetsConditions(lookupstring,conditions)
     for _, condition in next, conditions do
         if lookupstring:find(condition) then
-            print(condition, lookupstring)
             return true
         end
     end
@@ -204,13 +203,13 @@ end
 local __namecall
 __namecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
     local method = getnamecallmethod()
-    local callingscript = tostring(getcallingscript()):lower()
+    local callingscript = getcallingscript()
     local arguments = {...}
     local self = arguments[1]
 	local main = arguments[2]
     if self == workspace and not checkcaller() and settings.rays then
-        if callingscript ~= "controlmodule" then
-            if settings.conditions.enabled and MeetsConditions(callingscript, settings.conditions.table) then else return __namecall(...) end
+        if tostring(callingscript):lower() ~= "controlmodule" then
+            if settings.conditions.enabled and MeetsConditions(tostring(callingscript):lower(),settings.conditions.table) then else return __namecall(...) end
             if method:lower():find("findpartonray") then
                 local hit = GetClosest()
                 if hit then
@@ -232,9 +231,9 @@ __namecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
 end))
 local __index = nil 
 __index = hookmetamethod(game, "__index", newcclosure(function(self, index)
-    local callingscript = tostring(getcallingscript()):lower()
+    local callingscript = getcallingscript()
     if self == client.Mouse and not checkcaller() and settings.mouse then
-        if settings.conditions.enabled and MeetsConditions(callingscript, settings.conditions.table) then else return __index(self, index) end
+        if settings.conditions.enabled and MeetsConditions(tostring(callingscript):lower(),settings.conditions.table) then else return __index(self, index) end
         local hit = GetClosest()
         if hit then
             if index:lower() == "target" then
