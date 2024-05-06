@@ -207,7 +207,7 @@ __namecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
     local arguments = {...}
     local self = arguments[1]
 	local main = arguments[2]
-    if self == workspace and not checkcaller() and settings.rays then
+    if self == workspace and not checkcaller() and settings.rays and settings.enabled then
         if tostring(callingscript):lower() ~= "controlmodule" then
             if settings.conditions.enabled and MeetsConditions(tostring(callingscript):lower(),settings.conditions.table) then else return __namecall(...) end
             if method:lower():find("findpartonray") then
@@ -232,7 +232,7 @@ end))
 local __index = nil 
 __index = hookmetamethod(game, "__index", newcclosure(function(self, index)
     local callingscript = getcallingscript()
-    if self == client.Mouse and not checkcaller() and settings.mouse then
+    if self == client.Mouse and not checkcaller() and settings.mouse and settings.enabled then
         if settings.conditions.enabled and MeetsConditions(tostring(callingscript):lower(),settings.conditions.table) then else return __index(self, index) end
         local hit = GetClosest()
         if hit then
@@ -260,14 +260,14 @@ client.RunService.RenderStepped:Connect(function()
     local MouseLocation = client.GetMouseLocation(client.UserInputService)
     Circle.Position = Vector2.new(MouseLocation.X,MouseLocation.Y)
     CircleOutline.Position = Vector2.new(MouseLocation.X,MouseLocation.Y)
-    if (os.clock() - Clock) > 0.1 and settings.hitpart == "rand" then
+    if (os.clock() - Clock) > 0.1 and settings.hitpart == "rand" and settings.enabled then
         Randomizer = math.random(1,2)
         Clock = os.clock()
     end
-    if settings.lockenabled or settings.trigger then
+    if settings.lockenabled or settings.trigger and settings.enabled then
         mhit = GetClosest()
     end
-    if (os.clock() - Clock2) > settings.interval and settings.trigger and mhit and settings.visiblecheck then
+    if (os.clock() - Clock2) > settings.interval and settings.trigger and mhit and settings.visiblecheck and settings.enabled then
         spawn(function()
             mouse1press()
             task.wait(settings.release)
@@ -275,7 +275,7 @@ client.RunService.RenderStepped:Connect(function()
             Clock2 = os.clock()
         end)
     end
-    if settings.lockenabled then
+    if settings.lockenabled and settings.enabled then
         if mhit then
             local PartLocation = GetScreenPosition(mhit.Position+addPredict(mhit))
             LockOutline1.Transparency = 1
