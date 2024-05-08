@@ -269,7 +269,7 @@ local function ESP(plr)
     coroutine.wrap(Updater)()
 end
 
-for i, v in pairs(cloneref(game:GetService("Players"):GetPlayers())) do
+for i, v in pairs(cloneref(game:GetService("Players")):GetPlayers())) do
     if v.Name ~= player.Name then
         coroutine.wrap(ESP)(v)
     end
