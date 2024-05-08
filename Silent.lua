@@ -84,17 +84,17 @@ local settings = {
     }
 }
 local client = {
-    ["GetPartsObscuringTarget"] = game:GetService("Workspace").CurrentCamera.GetPartsObscuringTarget,
-    ["WorldToScreenPoint"] = game:GetService("Workspace").CurrentCamera.WorldToScreenPoint,
-    ["GetMouseLocation"] = game:GetService("UserInputService").GetMouseLocation,
-    ["Mouse"] = game:GetService("Players").LocalPlayer:GetMouse(),
-    ["UserInputService"] = game:GetService("UserInputService"),
-    ["GetPlayers"] = game:GetService("Players").GetPlayers,
-    ["self"] = game:GetService("Players").LocalPlayer,
-    ["RunService"] = game:GetService("RunService"),
-    ["Players"] = game:GetService("Players"),
+    ["GetPartsObscuringTarget"] = cloneref(game:GetService("Workspace")).CurrentCamera.GetPartsObscuringTarget,
+    ["WorldToScreenPoint"] = cloneref(game:GetService("Workspace")).CurrentCamera.WorldToScreenPoint,
+    ["GetMouseLocation"] = cloneref(game:GetService("UserInputService")).GetMouseLocation,
+    ["Mouse"] = cloneref(game:GetService("Players")).LocalPlayer:GetMouse(),
+    ["UserInputService"] = cloneref(game:GetService("UserInputService")),
+    ["GetPlayers"] = cloneref(game:GetService("Players")).GetPlayers,
+    ["self"] = cloneref(game:GetService("Players")).LocalPlayer,
+    ["RunService"] = cloneref(game:GetService("RunService")),
+    ["Players"] = cloneref(game:GetService("Players")),
     ["FindFirstChild"] = game.FindFirstChild,
-    ["Camera"] = workspace.CurrentCamera,
+    ["Camera"] = cloneref(game:GetService("Workspace")).CurrentCamera,
     ["GetChildren"] = game.GetChildren
 }
 local function addPredict(hit)
