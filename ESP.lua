@@ -21,8 +21,8 @@ local settings = {
     AutoScale = false
 }
 
-local space = game:GetService("Workspace")
-local player = game:GetService("Players").LocalPlayer
+local space = cloneref(game:GetService("Workspace"))
+local player = cloneref(game:GetService("Players")).LocalPlayer
 local camera = space.CurrentCamera
 
 local function NewText(color, size, transparency)
@@ -51,13 +51,13 @@ local function Size(size, lib)
     end
 end
 
-for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+for i, v in pairs(cloneref(game:GetService("Players")):GetPlayers()) do
     local library = {
         name = NewText(settings.Color, settings.Size, settings.Transparency)
     }
     local function ESP()
         local connection
-        connection = game:GetService("RunService").RenderStepped:Connect(function()
+        connection = cloneref(game:GetService("RunService")).RenderStepped:Connect(function()
             if v.Character ~= nil and v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("HumanoidRootPart") ~= nil and v.Name ~= player.Name and v.Character.Humanoid.Health > 0 then
                 local HumanoidRootPart_Pos, OnScreen = camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
                 if OnScreen then
@@ -78,7 +78,7 @@ for i, v in pairs(game:GetService("Players"):GetPlayers()) do
                 end
             else 
                 Visibility(false, library)
-                if game.Players:FindFirstChild(v.Name) == nil then
+                if cloneref(game:GetService("Players")):FindFirstChild(v.Name) == nil then
                     connection:Disconnect()
                 end
             end
@@ -87,14 +87,14 @@ for i, v in pairs(game:GetService("Players"):GetPlayers()) do
     coroutine.wrap(ESP)()
 end
 
-game.Players.PlayerAdded:Connect(function(newplr)
+cloneref(game:GetService("Players")).PlayerAdded:Connect(function(newplr)
     print(newplr)
     local library = {
         name = NewText(settings.Color, settings.Size, settings.Transparency)
     }
     local function ESP()
         local connection
-        connection = game:GetService("RunService").RenderStepped:Connect(function()
+        connection = cloneref(game:GetService("RunService")).RenderStepped:Connect(function()
             if newplr.Character ~= nil and newplr.Character:FindFirstChild("Humanoid") ~= nil and newplr.Character:FindFirstChild("HumanoidRootPart") ~= nil and newplr.Name ~= player.Name and newplr.Character.Humanoid.Health > 0 then
                 local HumanoidRootPart_Pos, OnScreen = camera:WorldToViewportPoint(newplr.Character.HumanoidRootPart.Position)
                 if OnScreen then
@@ -115,7 +115,7 @@ game.Players.PlayerAdded:Connect(function(newplr)
                 end
             else 
                 Visibility(false, library)
-                if game.Players:FindFirstChild(newplr.Name) == nil then
+                if cloneref(game:GetService("Players")):FindFirstChild(newplr.Name) == nil then
                     connection:Disconnect()
                 end
             end
@@ -126,8 +126,8 @@ end)
 local TeamColor = false
 
 --// SEPARATION
-local player = game:GetService("Players").LocalPlayer
-local camera = game:GetService("Workspace").CurrentCamera
+local player = cloneref(game:GetService("Players")).LocalPlayer
+local camera = cloneref(game:GetService("Workspace")).CurrentCamera
 local mouse = player:GetMouse()
 
 local function NewQuad(thickness, color)
@@ -186,7 +186,7 @@ local function ESP(plr)
 
     local function Updater()
         local connection
-        connection = game:GetService("RunService").RenderStepped:Connect(function()
+        connection = cloneref(game:GetService("RunService")).RenderStepped:Connect(function()
             if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("Head") ~= nil then
                 local HumPos, OnScreen = camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
                 if OnScreen then
@@ -260,7 +260,7 @@ local function ESP(plr)
                 end
             else 
                 Visibility(false, library)
-                if game.Players:FindFirstChild(plr.Name) == nil then
+                if cloneref(game:GetService("Players")):FindFirstChild(plr.Name) == nil then
                     connection:Disconnect()
                 end
             end
@@ -269,13 +269,13 @@ local function ESP(plr)
     coroutine.wrap(Updater)()
 end
 
-for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+for i, v in pairs(cloneref(game:GetService("Players"):GetPlayers())) do
     if v.Name ~= player.Name then
         coroutine.wrap(ESP)(v)
     end
 end
 
-game.Players.PlayerAdded:Connect(function(newplr)
+cloneref(game:GetService("Players"):GetPlayers()).PlayerAdded:Connect(function(newplr)
     if newplr.Name ~= player.Name then
         coroutine.wrap(ESP)(newplr)
     end
